@@ -1,12 +1,14 @@
 import torch
+from PIL import Image
+
 from feature_collection import *
 from feature_extraction import FExt
-from PIL import Image
 from util import transform_PIL
 
 model = FExt()
 
-def get_nn(img_path):
+
+def get_nn(img_path, topK=10):
     '''
     Input:
         img_path: path to query image
@@ -15,6 +17,6 @@ def get_nn(img_path):
     '''
     collection = get_collection()
     img = Image.open(img_path)
-    embeddings = torch.flatten(model.get_features(img)).detach().numpy()
-    results = search_collection(collection, embeddings)
+    embeddings = model.get_features(img).detach().numpy().tolist()
+    results = search_collection(collection, embeddings, topK)
     return results

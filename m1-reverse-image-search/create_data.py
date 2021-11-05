@@ -1,42 +1,78 @@
 import os
+import sqlite3
 
 import torch
-import torchvision.transforms as T
 from dotenv import load_dotenv
+from PIL import Image
 from pymilvus import connections
-from torchvision.datasets import CIFAR100
+from torch.utils.data import DataLoader, Dataset
+from tqdm import tqdm
 
 from feature_collection import get_collection
 from feature_extraction import FExt
+from util import transform_PIL
+
+
+class VOC2012(Dataset):
+    def __init__(self):
+        load_dotenv()
+        self.img_dir = os.getenv('DATA_DIR')
+        self.image_names = os.listdir(self.img_dir)
+
+    def __len__(self):
+        return len(self.image_names)
+
+    def __getitem__(self, index):
+        img_path = os.path.join(self.img_dir, self.image_names[index])
+        img = Image.open(img_path)
+        tensor = transform_PIL(img)
+        return tensor, self.image_names[index]
+
+
+def create_table():
+    con = sqlite3.connect('image_paths.db')
+    cur = con.cursor()
+    # Create table
+    cur.execute('''CREATE TABLE paths
+                (id unsigned big int, path text)''')
+
+    # Save (commit) the changes
+    con.commit()
+
+    # We can also close the connection if we are done with it.
+    # Just be sure any changes have been committed or they will be lost.
+    con.close()
+
+
+def populate_db():
+    con = sqlite3.connect('image_paths.db')
+    cur = con.cursor()
+
+    feature_extractor = FExt()
+    dataset = VOC2012()
+    dataloader = DataLoader(dataset, batch_size=256, shuffle=False)
+    collection = get_collection()
+
+    for tensor, filenames in tqdm(dataloader):
+        with torch.no_grad():
+            output = feature_extractor.get_features(tensor, transform=False)
+            output = output.cpu().detach().numpy()
+
+        # insert into Db
+        mr = collection.insert([output.tolist()])
+        mr_ids = mr.primary_keys
+        records = list(zip(mr_ids, filenames))
+        cur.executemany('INSERT INTO paths VALUES(?,?);', records)
+
+    # commit the changes to db
+    con.commit()
+    # close the connection
+    con.close()
+
 
 if __name__ == '__main__':
     # connect to Milvus
     connections.connect(host="127.0.0.1", port=19530)
-    feature_extractor = FExt()
-    load_dotenv()
-    tensors_dir = os.getenv('DATA_DIR')
-    imgs_dir = os.getenv('IMGS_DIR')
-
-    tensor_ds = CIFAR100(tensors_dir,
-                         transform=T.Compose([
-                             T.Resize(256),
-                             T.CenterCrop(224),
-                             T.ToTensor(),
-                             T.Normalize(mean=[0.485, 0.456, 0.406],
-                                         std=[0.229, 0.224, 0.225])
-                         ])
-                         )
-    dataloader = torch.utils.data.DataLoader(
-        tensor_ds, num_workers=4, batch_size=256, shuffle=False, pin_memory=True)
-    collection = get_collection()
-
-    for i, (inputs, labels) in enumerate(dataloader):
-        with torch.no_grad():
-            output = feature_extractor.get_features(
-                inputs, transform=False).squeeze()
-            output = output.cpu().detach().numpy()
-
-        # TODO
-        # insert into Db
-        mr = collection.insert([output.tolist()])
-        ids = mr.primary_keys
+    # comment these if you have run this file before
+    create_table()  # raises error if db already exists
+    populate_db()  # takes around 15-20 min to run

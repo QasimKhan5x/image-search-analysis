@@ -1,6 +1,7 @@
 hello_milvus.py
 test.*
 *.ipynb
+image_paths.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,15 +1,23 @@
-
 # Usage
-We are currently using reverse image search on [CIFAR100](https://www.cs.toronto.edu/~kriz/cifar.html).
+
+We are currently using reverse image search on [PASCAL VOC 2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html).
+
+First, install necessary requirements via
 
     pip install -r requirements.txt
-    
-Create `.env` file and add variables that point to directory of CIFAR100 pickle file & CIFAR100 images directory as follows:
+
+Create `.env` file and add a variable that points to the directory of PASCAL VOC 2012 images directory:
 
     DATA_DIR=<value>
-    IMGS_DIR=<value>
 
-Pass image path to `main.py` as an argument. For example,
-   
+Then follow the subsequent steps by entering the non-commented (non-#) lines in your terminal:
+
+    # create milvus collection
+    python feature_collection.py
+    # store embeddings in collection and
+    # create and populate sqlite3 database
+    python create_data.py
+
+Pass query image path to `main.py` as an argument. For example,
 
     python main.py path/to/image.jpg

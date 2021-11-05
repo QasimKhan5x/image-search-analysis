@@ -1,3 +1,4 @@
+import torch
 from torchvision.models import resnet18
 from torchvision.models.feature_extraction import create_feature_extractor
 
@@ -12,8 +13,9 @@ class FExt:
         self.fx = create_feature_extractor(model, return_nodes=return_nodes)
 
     def get_features(self, x, transform=True):
-        # convert to tensor
+        # convert PIL img to tensor
         if transform:
             x = transform_PIL(x)
+            x = torch.unsqueeze(x, 0)
         y = self.fx(x)
         return y['features_512']

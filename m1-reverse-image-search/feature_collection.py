@@ -6,7 +6,7 @@ from pymilvus import (Collection, CollectionSchema, DataType, FieldSchema,
                       connections)
 
 
-def setup_collection(collection_name="cifar100_ris"):
+def setup_collection(collection_name="voc2012_ris"):
     dim = 512
     default_fields = [
         FieldSchema(name="id", dtype=DataType.INT64,
@@ -14,14 +14,14 @@ def setup_collection(collection_name="cifar100_ris"):
         FieldSchema(name="vector", dtype=DataType.FLOAT_VECTOR, dim=dim)
     ]
     default_schema = CollectionSchema(
-        fields=default_fields, description="Cifar100 test collection")
+        fields=default_fields, description="PASCAL VOC 2012 collection")
 
     collection = Collection(name=collection_name, schema=default_schema)
     collection.load()
     return collection
 
 
-def get_collection(collection_name="cifar100_ris"):
+def get_collection(collection_name="voc2012_ris"):
     '''Assumes that a connection to milvus has been established'''
     assert pymilvus.utility.get_connection().has_collection(collection_name), \
         "ERROR: Collection not found"
@@ -51,3 +51,4 @@ if __name__ == '__main__':
                      "params": {"nlist": 2048}, "metric_type": "L2"}
     collection.create_index(field_name="vector", index_params=default_index)
     collection.load()
+    print("SUCCESS")

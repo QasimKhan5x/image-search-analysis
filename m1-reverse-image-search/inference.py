@@ -3,7 +3,6 @@ from PIL import Image
 
 from feature_collection import *
 from feature_extraction import FExt
-from util import transform_PIL
 
 model = FExt()
 

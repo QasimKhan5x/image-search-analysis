@@ -6,7 +6,7 @@ First, install necessary requirements via
 
     pip install -r requirements.txt
 
-Create `.env` file and add a variable that points to the directory of PASCAL VOC 2012 images directory:
+Create `.env` file and add a variable that points to the PASCAL VOC 2012 images directory:
 
     DATA_DIR=<value>
 

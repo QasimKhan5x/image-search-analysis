@@ -51,4 +51,4 @@ if __name__ == '__main__':
                      "params": {"nlist": 2048}, "metric_type": "L2"}
     collection.create_index(field_name="vector", index_params=default_index)
     collection.load()
-    print("SUCCESS")
+    logging.info("SUCCESS")

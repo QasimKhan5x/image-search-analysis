@@ -8,7 +8,7 @@ from feature_extraction import FExt
 model = FExt()
 
 
-def get_nn(img_path, topK=10):
+def get_nn(img, topK=10):
     '''
     Input:
         img_path: path to query image
@@ -16,7 +16,10 @@ def get_nn(img_path, topK=10):
         results: array with elements having attribrutes (id, distance)
     '''
     collection = get_collection()
-    img = Image.open(img_path)
+    if isinstance(img, str):
+        img = Image.open(img)
+    else:
+        assert isinstance(img, Image.Image)
     embeddings = model.get_features(img).detach().numpy().tolist()
     # get 1st index element because only 1 image was passed as query
     results = search_collection(collection, embeddings, topK)[0]

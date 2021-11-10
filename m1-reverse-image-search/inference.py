@@ -1,3 +1,4 @@
+import logging
 import os
 
 from PIL import Image
@@ -26,20 +27,25 @@ def get_nn(img, topK=10):
     return results
 
 
-def get_nn_filepaths(img_path, imgs_dir, cursor, topK=10):
+def get_nn_filepaths(imgs_dir, cursor, img=None, img_path=None, topK=10):
     '''
     Gets the filepaths of the topK images 
     most similar to a query image.
 
     Parameters:
             imgs_dir (string): The path to the directory of images
-            img_path (string): Path to query image
             cursor (sqlite3.Cursor): Cursor that points to local sqlite3 database
             topK (int): Number of neighbors to return (default 10)
+            img_path (string): Path to query image
+            img (PIL.Image.Image): PIL Image object used as query image 
     Returns:
             filepaths (list): List containing string filepath strings in the imgs_dir
                               that are the nearest neighbors of the query image
     '''
+    if img == None and img_path == None:
+        logging.error("Pass either PIL.Image.Image OR image file path")
+    if img_path:
+        img = Image.open(img_path)
     results = get_nn(img_path, topK)
     filepaths = []
     for result in results:

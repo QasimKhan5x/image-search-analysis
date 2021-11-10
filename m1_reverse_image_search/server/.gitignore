@@ -1,0 +1,4 @@
+__pycache__
+fastapi
+static/images
+image_paths.db

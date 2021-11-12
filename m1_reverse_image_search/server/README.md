@@ -1,13 +1,13 @@
-# Digital Image Processing Online
+
+# Reverse Image Search Web App
 
 Install Requirements by using
-pip install -r requirements.txt
 
-put your "images" folder inside static folder
+    pip install -r requirements.txt
 
-edit the get_neighbors method in main to return whatever neighbors you want.
-The result be a list of string names of image files (in jpg format) in your new static/images folder
+Put your images dataset folder inside `./static/` 
+In this directory, open a terminal and run
 
-In root, open terminal and run
-uvicorn main:app --reload
-to run the app in development mode.
+    uvicorn main:app --reload
+
+This runs the web app in development mode. 

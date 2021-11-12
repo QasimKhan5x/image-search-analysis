@@ -19,9 +19,6 @@ def get_nn(img, topK=10):
     collection = get_collection()
     if type(img) == str:
         img = Image.open(img)
-    print("================================")
-    print(img.size)
-    print("================================")
     embeddings = model.get_features(img).detach().numpy().tolist()
     # get 1st index element because only 1 image was passed as query
     results = search_collection(collection, embeddings, topK)[0]

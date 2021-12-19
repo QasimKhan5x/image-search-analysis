@@ -2,20 +2,16 @@ import torch
 from torchvision.models import resnet18
 from torchvision.models.feature_extraction import create_feature_extractor
 
-from util import transform_PIL
 
-
-class FExt:
+class FExt(torch.nn.Module):
     def __init__(self):
+        super(FExt, self).__init__()
         # create feature extractor
         model = resnet18(pretrained=True).eval()
+        # extract flatten layer and rename it as features_512
         return_nodes = {"flatten": "features_512"}
         self.fx = create_feature_extractor(model, return_nodes=return_nodes)
 
-    def get_features(self, x, transform=True):
-        # convert PIL img to tensor
-        if transform:
-            x = transform_PIL(x)
-            x = torch.unsqueeze(x, 0)
+    def forward(self, x):
         y = self.fx(x)
         return y['features_512']

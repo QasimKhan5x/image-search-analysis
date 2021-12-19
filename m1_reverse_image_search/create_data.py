@@ -55,8 +55,7 @@ def populate_db():
 
     for tensor, filenames in tqdm(dataloader):
         with torch.no_grad():
-            output = feature_extractor.get_features(tensor, transform=False)
-            output = output.cpu().detach().numpy()
+            output = feature_extractor(tensor).cpu().detach().numpy()
 
         # insert into Db
         mr = collection.insert([output.tolist()])

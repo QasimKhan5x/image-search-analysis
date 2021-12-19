@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,29 +6,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Digital Image Processing</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <h1>
-        Test Static File
+        DIP by zcs, qasim and dawood
     </h1>
-    <form action="/uploadfiles/" method="POST" enctype="multipart/form-data">
-        <div>
-            <h4>How Many Results You Want? </h4>
-            <label for="res5"><input type="radio" name="resultLimit" id="res5" value=5>5</label>
-            <label for="res10"><input type="radio" name="resultLimit" id="res10" value=10>10</label>
-            <label for="res15"><input type="radio" name="resultLimit" id="res15" value=15>15</label>
-        </div>
+    <form id="myform" action="/uploadFile" method="POST" enctype="multipart/form-data">
+        
         <div>
             <h4>
                 Attach Photo To Search
             </h4>
-            <input type="file" name="file">
+            <input class="mybutton" type="file" name="file" accept="image/*">
         </div>
-        <button type="submit">Send</button>
+        <button class="mybutton" id='send' type="submit">Send</button>
     </form>
+    <div id="show">
 
+    </div>
+    <button class="mybutton" id='loadmore' >Load More</button>
 </body>
+<script src="script.js"></script>
 
 </html>

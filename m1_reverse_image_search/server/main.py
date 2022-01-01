@@ -19,16 +19,11 @@ cur = con.cursor()
 @app.post("/uploadFile")
 async def create_upload_files(resultLimit: int = Form(...), file: UploadFile = File(...)):
     try:
-        print(1)
         img = Image.open(file.file).convert("RGB")
-        print(2)
         res = get_nn_filepaths(cursor=cur, img=img, topK=resultLimit)
-        print(3)
     except:
         res = None
-        print(4)
     finally:
-        print(5)
         return res
 
 

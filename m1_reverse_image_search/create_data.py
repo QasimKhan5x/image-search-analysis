@@ -65,6 +65,7 @@ def populate_db():
         records = list(zip(mr_ids, filenames))
         cur.executemany('INSERT INTO paths VALUES(?,?);', records)
 
+    collection.release()
     # commit the changes to db
     con.commit()
     # close the connection
@@ -74,6 +75,7 @@ def populate_db():
 if __name__ == '__main__':
     # connect to Milvus
     connections.connect(host="127.0.0.1", port=19530)
-    # comment these if you have run this file before
-    create_table()  # raises error if db already exists
-    populate_db()  # takes around 15-20 min to run
+    if not os.path.isfile("image_paths.db"):
+        create_table()  # raises error if db already exists
+        populate_db()  # takes around 15-20 min to run
+    connections.disconnect("default")

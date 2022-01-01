@@ -1,5 +1,4 @@
 import logging
-import os
 
 import torch
 from PIL import Image
@@ -22,6 +21,8 @@ def get_nn(tensor, topK=10):
     embeddings = model(tensor).cpu().detach().numpy().tolist()
     # get 1st index element because only 1 image was passed as query
     results = search_collection(collection, embeddings, topK)[0]
+    # Release the collection loaded in Milvus to reduce memory consumption when the search is completed.
+    collection.release()
     return results
 
 

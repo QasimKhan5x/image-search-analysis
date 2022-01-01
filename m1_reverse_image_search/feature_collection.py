@@ -1,9 +1,8 @@
-import logging
 import time
 
 import pymilvus
 from pymilvus import (Collection, CollectionSchema, DataType, FieldSchema,
-                      connections)
+                      connections, utility)
 
 
 def setup_collection(collection_name="voc2012_ris"):
@@ -23,10 +22,12 @@ def setup_collection(collection_name="voc2012_ris"):
 
 def get_collection(collection_name="voc2012_ris"):
     '''Assumes that a connection to milvus has been established'''
-    assert pymilvus.utility.get_connection().has_collection(collection_name), \
+    assert utility.has_collection(collection_name), \
         "ERROR: Collection not found"
     collection = Collection(name=collection_name)
+    print("Collection Loading")
     collection.load()
+    print("Collection Loaded!")
     return collection
 
 
@@ -38,7 +39,7 @@ def search_collection(collection, vectors, topK=50):
     res = collection.search(vectors, "vector",
                             param=search_params, limit=topK, expr=None)
     end = time.time() - start
-    logging.info(f"Search took {end} seconds")
+    print(f"Search took {end} seconds")
     return res
 
 
@@ -46,10 +47,19 @@ if __name__ == '__main__':
     # connect to Milvus
     connections.connect(host="127.0.0.1", port=19530)
     # Create a collection
-    collection = setup_collection()
-    # Create IVF_SQ8 index to the  collection
-    default_index = {"index_type": "IVF_SQ8",
-                     "params": {"nlist": 2048}, "metric_type": "L2"}
-    collection.create_index(field_name="vector", index_params=default_index)
+    if utility.has_collection("voc2012_ris"):
+        print("Collection Found!")
+        collection = get_collection("voc2012_ris")
+
+    else:
+        print("Collection not found. Creating.")
+        collection = setup_collection()
+        # Create IVF_SQ8 index to the  collection
+        default_index = {"index_type": "IVF_SQ8",
+                         "params": {"nlist": 2048}, "metric_type": "L2"}
+        collection.create_index(field_name="vector",
+                                index_params=default_index)
     collection.load()
-    logging.info("SUCCESS")
+    collection.release()
+    connections.disconnect("default")
+    print("SUCCESS")

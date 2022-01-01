@@ -22,3 +22,4 @@ filepaths = get_nn_filepaths(cur, img_path=query_img_path)
 
 for fp in filepaths:
     print(os.path.join(imgs_dir, fp))
+connections.disconnect("default")

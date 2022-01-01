@@ -25,8 +25,9 @@ def get_collection(collection_name="voc2012_ris"):
     '''Assumes that a connection to milvus has been established'''
     assert pymilvus.utility.get_connection().has_collection(collection_name), \
         "ERROR: Collection not found"
-
-    return setup_collection(collection_name)
+    collection = Collection(name=collection_name)
+    collection.load()
+    return collection
 
 
 def search_collection(collection, vectors, topK=50):

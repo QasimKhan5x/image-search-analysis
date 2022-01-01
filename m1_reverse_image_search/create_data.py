@@ -52,9 +52,11 @@ def populate_db():
     dataset = VOC2012()
     dataloader = DataLoader(dataset, batch_size=256, shuffle=False)
     collection = get_collection()
-
+    device = torch.device(
+        'cuda') if torch.cuda.is_available() else torch.device('cpu')
     for tensor, filenames in tqdm(dataloader):
         with torch.no_grad():
+            tensor = tensor.to(device)
             output = feature_extractor(tensor).cpu().detach().numpy()
 
         # insert into Db

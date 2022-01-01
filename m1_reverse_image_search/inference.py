@@ -19,7 +19,7 @@ def get_nn(tensor, topK=10):
         results: array with elements having attribrutes (id, distance)
     '''
     collection = get_collection()
-    embeddings = model(tensor).detach().numpy().tolist()
+    embeddings = model(tensor).cpu().detach().numpy().tolist()
     # get 1st index element because only 1 image was passed as query
     results = search_collection(collection, embeddings, topK)[0]
     return results
@@ -41,10 +41,13 @@ def get_nn_filepaths(cursor, img=None, img_path=None, topK=10):
     '''
     if img == None and img_path == None:
         logging.error("Pass either PIL.Image.Image OR image file path")
-    if img != None and img_path:
-        img = Image.open(img_path)
+    if img_path:
+        img = Image.open(img_path).convert("RGB")
     tensor = transform_PIL(img)
     tensor = torch.unsqueeze(tensor, 0)
+    device = torch.device(
+        'cuda') if torch.cuda.is_available() else torch.device('cpu')
+    tensor = tensor.to(device)
     results = get_nn(tensor, topK)
     filepaths = []
     for result in results:

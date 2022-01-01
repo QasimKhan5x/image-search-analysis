@@ -18,6 +18,9 @@ def get_nn(tensor, topK=10):
         results: array with elements having attribrutes (id, distance)
     '''
     collection = get_collection()
+    # Load the collection to memory before conducting a vector similarity search
+    collection.load()
+    # Create vector embeddings
     embeddings = model(tensor).cpu().detach().numpy().tolist()
     # get 1st index element because only 1 image was passed as query
     results = search_collection(collection, embeddings, topK)[0]

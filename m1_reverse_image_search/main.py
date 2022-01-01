@@ -19,7 +19,4 @@ connections.connect(host="127.0.0.1", port=19530)
 con = sqlite3.connect('image_paths.db')
 cur = con.cursor()
 filepaths = get_nn_filepaths(cur, img_path=query_img_path)
-
-for fp in filepaths:
-    print(os.path.join(imgs_dir, fp))
 connections.disconnect("default")

@@ -50,33 +50,54 @@ def populate_db():
 
     feature_extractor = FExt()
     dataset = VOC2012()
-    dataloader = DataLoader(dataset, batch_size=256, shuffle=False)
+    dataloader = DataLoader(dataset, batch_size=64, shuffle=False)
     collection = get_collection()
     device = torch.device(
         'cuda') if torch.cuda.is_available() else torch.device('cpu')
     for tensor, filenames in tqdm(dataloader):
         with torch.no_grad():
             tensor = tensor.to(device)
-            output = feature_extractor(tensor).cpu().detach().numpy()
+            result = feature_extractor(tensor)
+            for layer in result:
+                result[layer] = result[layer].cpu().detach().numpy().tolist()
 
         # insert into Db
-        mr = collection.insert([output.tolist()])
+        mr = collection.insert([
+            result['low'],
+            result['middle'],
+            result['high'],
+            result['final']
+        ])
         mr_ids = mr.primary_keys
         records = list(zip(mr_ids, filenames))
         cur.executemany('INSERT INTO paths VALUES(?,?);', records)
-
+    print('Inserted Data. Creating Indexes...')
     index_params = {
         "metric_type": "L2",
         "index_type": "FLAT",
         "params": {"nlist": 523}
     }
     collection.create_index(
-        field_name="vector",
+        field_name="low_level_features",
         index_params=index_params
     )
+    collection.create_index(
+        field_name="mid_level_features",
+        index_params=index_params
+    )
+    collection.create_index(
+        field_name="high_level_features",
+        index_params=index_params
+    )
+    collection.create_index(
+        field_name="final_layer_features",
+        index_params=index_params
+    )
+    print('Indexes Created!')
 
     # commit the changes to db
     con.commit()
+    print('Data added to DB')
     # close the connection
     con.close()
 

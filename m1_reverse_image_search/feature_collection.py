@@ -59,14 +59,24 @@ def get_collection(collection_name="voc2012_effnetb07"):
     return collection
 
 
-def search_collection(collection, vectors, topK):
+def search_collection(collection, vectors, topK, field='final'):
+    assert field in ('low', 'middle', 'high', 'final')
+    if field == 'low':
+        field = 'low_level_features'
+    elif field == 'middle':
+        field = 'mid_level_features'
+    elif field == 'high':
+        field = 'high_level_features'
+    else:
+        field = 'final_layer_features'
+
     search_params = {"metric_type": "L2"}
     if not isinstance(vectors, list):
         vectors = vectors.tolist()
     print("Searching collection...")
     start = time.time()
     res = collection.search(data=vectors,
-                            anns_field="vector",
+                            anns_field=field,
                             param=search_params,
                             limit=topK)
     end = time.time() - start

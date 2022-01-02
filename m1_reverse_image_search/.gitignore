@@ -1,5 +1,6 @@
 hello_milvus.py
 test.*
+test_command.txt
 *.ipynb
 image_paths.db
 

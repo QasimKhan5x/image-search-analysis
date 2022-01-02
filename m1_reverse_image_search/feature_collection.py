@@ -51,7 +51,7 @@ def setup_collection(collection_name):
     return collection
 
 
-def get_collection(collection_name="voc2012_effnet-b07"):
+def get_collection(collection_name="voc2012_effnetb07"):
     '''Assumes that a connection to milvus has been established'''
     assert utility.has_collection(collection_name), \
         "ERROR: Collection not found"
@@ -78,12 +78,12 @@ if __name__ == '__main__':
     # connect to Milvus
     connections.connect(host="127.0.0.1", port=19530)
     # Create or Get a collection
-    if utility.has_collection("voc2012_effnet-b07"):
+    if utility.has_collection("voc2012_effnetb07"):
         print("Collection Found!")
         collection = get_collection()
 
     else:
         print("Collection not found. Creating.")
-        collection = setup_collection("voc2012_effnet-b07")
+        collection = setup_collection("voc2012_effnetb07")
     connections.disconnect("default")
     print("SUCCESS")

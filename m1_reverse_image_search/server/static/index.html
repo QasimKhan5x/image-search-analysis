@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,23 +10,51 @@
 </head>
 
 <body>
-    <h1>
-        DIP by zcs, qasim and dawood
-    </h1>
-    <form id="myform" action="/uploadFile" method="POST" enctype="multipart/form-data">
-        
-        <div>
-            <h4>
+    <header>
+        <h1>CBIR</h1>
+    </header>
+    <div class="form-and-image">
+
+        <form id="myform" action="/uploadFile" method="POST" enctype="multipart/form-data">
+
+            <p>
                 Attach Photo To Search
-            </h4>
-            <input class="mybutton" type="file" name="file" accept="image/*">
+            </p>
+
+            <div class="margin-5">
+                <div class="center">
+                    <label for="img-file">Your Image?</label>
+                </div>
+
+                <input required class="inputfile mybutton" type="file" name="img_file" accept="image/*" id='img-file' multiple="false">
+            </div>
+
+            <div class="margin-5">
+                <div class="center">
+                    <label for="json-file">Your JSON file?</label>
+                </div>
+                <input required class="mybutton" type="file" name="json_file" id='json-file' multiple="false">
+            </div>
+            <div class="margin-5">
+                <button class="mybutton" id='send' type="submit">Search</button>
+            </div>
+        </form>
+        <div class="image-holder">
+            <img id="to-be-uploaded">
         </div>
-        <button class="mybutton" id='send' type="submit">Send</button>
-    </form>
+    </div>
+
     <div id="show">
 
     </div>
-    <button class="mybutton" id='loadmore' >Load More</button>
+    <div class="loadmorediv">
+        <div id="loader" class="btn hidden">
+            <span class="spinner"></span>
+            <span class="btn__text">Loading...</span>
+        </div>
+        <button class="mybutton loadmore hidden" id='loadmore'>Load More</button>
+    </div>
+
 </body>
 <script src="script.js"></script>
 

@@ -51,7 +51,7 @@ form.addEventListener('submit', async (e) => {
     page = 0;
     load_images(false)
 });
-loadmore.addEventListener('click', load_images)
+loadmore.addEventListener('click', ()=>{load_images(true)})
 
 function union(setA, setB) {
     let _union = new Set(setA)

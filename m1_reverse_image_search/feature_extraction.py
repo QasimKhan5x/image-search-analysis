@@ -13,9 +13,9 @@ class FExt(torch.nn.Module):
         # 4 feature vectors
         return_nodes = {
             # node_name: user-specified key for output dict
-            'features.2.6.block.2.avgpool': 'low',
-            'features.5.4.block.2.avgpool': 'middle',
-            'features.7.3.block.2.avgpool': 'high',
+            # 'features.2.6.block.2.avgpool': 'low',
+            # 'features.5.4.block.2.avgpool': 'middle',
+            # 'features.7.3.block.2.avgpool': 'high',
             'flatten': 'final',
         }
         self.fx = create_feature_extractor(model, return_nodes=return_nodes)

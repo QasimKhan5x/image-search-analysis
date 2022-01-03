@@ -17,23 +17,23 @@ def setup_collection(collection_name):
         auto_id=True
     )
 
-    low_level = FieldSchema(
-        name="low_level_features",
-        dtype=DataType.FLOAT_VECTOR,
-        dim=low
-    )
+    # low_level = FieldSchema(
+    #     name="low_level_features",
+    #     dtype=DataType.FLOAT_VECTOR,
+    #     dim=low
+    # )
 
-    mid_level = FieldSchema(
-        name="mid_level_features",
-        dtype=DataType.FLOAT_VECTOR,
-        dim=mid
-    )
+    # mid_level = FieldSchema(
+    #     name="mid_level_features",
+    #     dtype=DataType.FLOAT_VECTOR,
+    #     dim=mid
+    # )
 
-    high_level = FieldSchema(
-        name="high_level_features",
-        dtype=DataType.FLOAT_VECTOR,
-        dim=high
-    )
+    # high_level = FieldSchema(
+    #     name="high_level_features",
+    #     dtype=DataType.FLOAT_VECTOR,
+    #     dim=high
+    # )
 
     final_level = FieldSchema(
         name="final_layer_features",
@@ -41,8 +41,13 @@ def setup_collection(collection_name):
         dim=final
     )
 
+    # schema = CollectionSchema(
+    #     fields=[img_id, low_level, mid_level, high_level, final_level],
+    #     description="VOC2012 EfficientNet-B07"
+    # )
+
     schema = CollectionSchema(
-        fields=[img_id, low_level, mid_level, high_level, final_level],
+        fields=[img_id, final_level],
         description="VOC2012 EfficientNet-B07"
     )
 
@@ -70,6 +75,7 @@ def search_collection(collection, vectors, topK, field='final'):
     else:
         field = 'final_layer_features'
 
+    # search_params = {"metric_type": "L2", "params": {"nq": 10}}
     search_params = {"metric_type": "L2"}
     if not isinstance(vectors, list):
         vectors = vectors.tolist()

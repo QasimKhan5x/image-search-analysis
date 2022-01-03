@@ -1,7 +1,6 @@
 import os
 import sqlite3
 
-import torch
 from dotenv import load_dotenv
 from PIL import Image
 from pymilvus import connections
@@ -9,7 +8,7 @@ from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 
 from feature_collection import get_collection
-from feature_extraction import FExt
+from inference import get_embedding
 from util import transform_PIL
 
 
@@ -22,11 +21,13 @@ class VOC2012(Dataset):
     def __len__(self):
         return len(self.image_names)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index, transform=True):
         img_path = os.path.join(self.img_dir, self.image_names[index])
-        img = Image.open(img_path)
-        tensor = transform_PIL(img)
-        return tensor, self.image_names[index]
+        img = Image.open(img_path).convert("RGB")
+        if transform:
+            tensor = transform_PIL(img)
+            return tensor, self.image_names[index]
+        return img, self.image_names[index]
 
 
 def create_table():
@@ -35,10 +36,8 @@ def create_table():
     # Create table
     cur.execute('''CREATE TABLE paths
                 (id unsigned big int, path text)''')
-
     # Save (commit) the changes
     con.commit()
-
     # We can also close the connection if we are done with it.
     # Just be sure any changes have been committed or they will be lost.
     con.close()
@@ -47,48 +46,26 @@ def create_table():
 def populate_db():
     con = sqlite3.connect('image_paths.db')
     cur = con.cursor()
-
-    feature_extractor = FExt()
     dataset = VOC2012()
     dataloader = DataLoader(dataset, batch_size=64, shuffle=False)
     collection = get_collection()
-    device = torch.device(
-        'cuda') if torch.cuda.is_available() else torch.device('cpu')
-    for tensor, filenames in tqdm(dataloader):
-        with torch.no_grad():
-            tensor = tensor.to(device)
-            result = feature_extractor(tensor)
-            for layer in result:
-                result[layer] = result[layer].cpu().detach().numpy().tolist()
-
-        # insert into Db
-        mr = collection.insert([
-            result['low'],
-            result['middle'],
-            result['high'],
-            result['final']
-        ])
+    for img, filenames in tqdm(dataloader):
+        embeddings = get_embedding(img, transform=False)
+        # insert into milvus
+        mr = collection.insert([embeddings])
+        # get milvus id
         mr_ids = mr.primary_keys
         records = list(zip(mr_ids, filenames))
+        # insert into sqlite
         cur.executemany('INSERT INTO paths VALUES(?,?);', records)
+
     print('Inserted Data. Creating Indexes...')
     index_params = {
         "metric_type": "L2",
         "index_type": "FLAT",
         "params": {"nlist": 523}
     }
-    collection.create_index(
-        field_name="low_level_features",
-        index_params=index_params
-    )
-    collection.create_index(
-        field_name="mid_level_features",
-        index_params=index_params
-    )
-    collection.create_index(
-        field_name="high_level_features",
-        index_params=index_params
-    )
+
     collection.create_index(
         field_name="final_layer_features",
         index_params=index_params

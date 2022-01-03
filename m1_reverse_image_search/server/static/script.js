@@ -17,12 +17,13 @@ fileToUpload.addEventListener('change', (e) => {
         to_be_upploaded.src = ''
     }
 })
-const load_images = async () => {
+const load_images = async (old=true) => {
     loader.classList.remove('hidden')
     loadmore.classList.add('hidden')
     page = page + 1
     const body = new FormData(form)
     body.append('resultLimit', page * 20)
+    body.append('old',old)
     const res = await fetch('/uploadFile', {
         method: 'POST',
         body
@@ -48,7 +49,7 @@ form.addEventListener('submit', async (e) => {
     show.innerHTML = '';
     loadmore.classList.add('hidden')
     page = 0;
-    load_images()
+    load_images(false)
 });
 loadmore.addEventListener('click', load_images)
 

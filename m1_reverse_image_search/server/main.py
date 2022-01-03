@@ -37,14 +37,11 @@ def closeServer():
     connections.disconnect("default")
     return 'Server shutdown successfully'
 
-embeddings = None
-
 @app.post("/uploadFile")
-async def create_upload_files(resultLimit: int = Form(...), old: bool = Form(...), img_file: UploadFile = File(...), json_file: UploadFile = File(...)):
+async def create_upload_files(resultLimit: int = Form(...), img_file: UploadFile = File(...), json_file: UploadFile = File(...)):
     try:
         img = Image.open(img_file.file).convert("RGB")
-        if not old: 
-            embeddings = get_embedding(img, True)
+        embeddings = get_embedding(img, True)
         res = get_nn_filepaths(cursor=cur,
                                embeddings=embeddings,
                                collection=collection,

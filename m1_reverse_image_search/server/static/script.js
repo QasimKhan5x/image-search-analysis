@@ -38,7 +38,7 @@ const load_images = async () => {
     images_to_show.forEach(i => {
         const div = document.createElement('div')
         div.className = 'img-box'
-        div.innerHTML = `<img src="/images/${i}.png" alt='images ${i}' />`
+        div.innerHTML = `<img src="/images/${i}" alt='images ${i}' />`
         show.appendChild(div)
     });
     loadmore.classList.remove('hidden')

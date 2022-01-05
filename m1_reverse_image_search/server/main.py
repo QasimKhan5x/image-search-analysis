@@ -37,8 +37,9 @@ def closeServer():
     connections.disconnect("default")
     return 'Server shutdown successfully'
 
+
 @app.post("/uploadFile")
-async def create_upload_files(resultLimit: int = Form(...), img_file: UploadFile = File(...), json_file: UploadFile = File(...)):
+async def create_upload_files(resultLimit: int = Form(...), img_file: UploadFile = File(...)):
     try:
         img = Image.open(img_file.file).convert("RGB")
         embeddings = get_embedding(img, True)
@@ -46,8 +47,6 @@ async def create_upload_files(resultLimit: int = Form(...), img_file: UploadFile
                                embeddings=embeddings,
                                collection=collection,
                                topK=resultLimit)
-        x = json_file.file.read().decode('utf-8')
-        print(json.loads(x))
     except Exception as e:
         print(e)
         res = None

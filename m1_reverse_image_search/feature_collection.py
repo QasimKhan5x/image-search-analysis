@@ -76,7 +76,7 @@ def search_collection(collection, vectors, topK, field='final'):
         field = 'final_layer_features'
 
     # search_params = {"metric_type": "L2", "params": {"nq": 10}}
-    search_params = {"metric_type": "L2"}
+    search_params = {"metric_type": "L2", "params": {"nprobe": 10}}
     if not isinstance(vectors, list):
         vectors = vectors.tolist()
     print("Searching collection...")

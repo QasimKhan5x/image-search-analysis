@@ -62,8 +62,8 @@ def populate_db():
     print('Inserted Data. Creating Indexes...')
     index_params = {
         "metric_type": "L2",
-        "index_type": "FLAT",
-        "params": {"nlist": 523}
+        "index_type": "IVF_FLAT",
+        "params": {"nlist": 1024}
     }
 
     collection.create_index(

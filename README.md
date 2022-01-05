@@ -26,7 +26,7 @@ To check if Milvus is running, enter
 
 `docker-compose down`
 
-An issue we are facing with Milvus currently is that if you issue the command to stop Milvus,
-then searching will take several minutes. Therefore, starting Milvus again after stopping it
-means following the entire process of creating a Milvus collection from scratch after deleting
-the `volumes` folder that is created after starting Milvus.
+An issue we are facing with Milvus currently is that if you stop Milvus, subsequent searches 
+after restarting Milvus will take several minutes. Therefore, restarting Milvus means
+following the entire process of creating a Milvus collection from scratch after deleting
+the `volumes` folder.

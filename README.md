@@ -1,6 +1,6 @@
 # Image Search Analysis
 
-Content-based image analysis, retrieval, and search using visual features, metadata, and natural language.
+Content-based image analysis, retrieval, and search using keywords as well as visual and textual features.
 
 Currently, we have developed a command line tool and web app that allows you to search for images similar to a query image in your favorite dataset. To proceed further, first install milvus by following the instructions below. Then proceed to the `m1_reverse_image_search` folder for further instructions.
 

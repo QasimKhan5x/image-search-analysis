@@ -8,7 +8,7 @@ To allow metadata creation of an image, we have provided the `Metadata_Creation.
 
 ## Using milvus
 
-To setup milvus, you need docker.
+To setup milvus, you need [docker](https://docs.docker.com/get-docker/).
 
 ### Start Milvus
 

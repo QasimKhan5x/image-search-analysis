@@ -14,6 +14,19 @@ To setup milvus, you need [docker](https://docs.docker.com/get-docker/).
 
 `docker-compose up -d`
 
+This will generate a `volumes` folder in the root directory.
+
+To check if Milvus is running, enter 
+
+`docker-compose ps` 
+
+3 containers should appear running healthy. More information [here](https://milvus.io/docs/install_standalone-docker.md).
+
 ### Stop Milvus
 
 `docker-compose down`
+
+An issue we are facing with Milvus currently is that if you issue the command to stop Milvus,
+then searching will take several minutes. Therefore, starting Milvus again after stopping it
+means following the entire process of creating a Milvus collection from scratch after deleting
+the `volumes` folder that is created after starting Milvus.

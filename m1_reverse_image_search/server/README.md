@@ -5,7 +5,7 @@ Install Requirements by using
 
     pip install -r requirements.txt
 
-Put your "images" folder inside `static` folder
+Create `./static/images/` and place all your images there.
 
 In this folder, open terminal and run
 

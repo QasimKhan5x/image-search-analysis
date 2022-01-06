@@ -2,10 +2,13 @@
 # Reverse Image Search Web App
 
 Install Requirements by using
+
     pip install -r requirements.txt
 
-Put your "images" folder inside static folder
+Put your "images" folder inside `static` folder
 
 In this folder, open terminal and run
-`uvicorn main:app --reload`
+
+    uvicorn main:app --reload
+
 to run the app in development mode.

@@ -27,6 +27,8 @@ To check if Milvus is running, enter
 `docker-compose down`
 
 An issue we are facing with Milvus currently is that if you stop Milvus, subsequent searches 
-after restarting Milvus will take several minutes. Therefore, restarting Milvus means
-following the entire process of creating a Milvus collection from scratch after deleting
-the `volumes` folder.
+after restarting Milvus will take several minutes. Therefore, after stopping Milvis you should,
+
+1. Delete the `volumes` folder and the `image_paths.db` file if you have created it
+2. Start Milvus
+3. Create a milvus collection and the sqlite3 database again

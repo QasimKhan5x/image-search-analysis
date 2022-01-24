@@ -5,9 +5,9 @@ Install requirements with
 
     pip install -r requirements.txt
 
-Create `./static/images` and place all your images in that folder.
+Create `./static/images` and place all your images in that directory.
 
-In this folder, open terminal and run
+In the current directory, open terminal and run
 
     uvicorn main:app --reload
 

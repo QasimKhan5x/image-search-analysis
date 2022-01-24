@@ -1,7 +1,7 @@
 
 # Reverse Image Search Web App
 
-Install Requirements by using
+Install requirements with
 
     pip install -r requirements.txt
 

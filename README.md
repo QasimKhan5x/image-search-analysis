@@ -1,16 +1,20 @@
 # Image Search Analysis
 
+## Overview
+
 Content-based image analysis, retrieval, and search, utilizing both keywords and a combination of visual and textual features. By analyzing image content, the system can efficiently retrieve and categorize images based on specified keywords or inherent visual properties.
  
 Currently, we have developed a command line tool and web app that allows you to search for images similar to a query image in your favorite dataset. To proceed further, first install milvus by following the instructions below. Then proceed to the `m1_reverse_image_search` folder for further instructions.
 
 To allow metadata creation of an image, we have provided the `Metadata_Creation.ipynb` notebook. Open that notebook in Google Colab with GPU on. Then, use `create_metadata_from_imgpath` to create metadata from the path to an image.
 
-## Using milvus
+## Getting Started
+
+### Using milvus
 
 To setup milvus, you need [docker](https://docs.docker.com/get-docker/).
 
-### Start Milvus
+#### Start Milvus
 
 `docker-compose up -d`
 
@@ -22,7 +26,7 @@ To check if Milvus is running, enter
 
 3 containers should appear running healthy. More information [here](https://milvus.io/docs/install_standalone-docker.md).
 
-### Stop Milvus
+#### Stop Milvus
 
 `docker-compose down`
 

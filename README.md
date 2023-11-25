@@ -1,7 +1,7 @@
 # Image Search Analysis
 
-Content-based image analysis, retrieval, and search using keywords as well as visual and textual features.
-
+Content-based image analysis, retrieval, and search, utilizing both keywords and a combination of visual and textual features. By analyzing image content, the system can efficiently retrieve and categorize images based on specified keywords or inherent visual properties.
+ 
 Currently, we have developed a command line tool and web app that allows you to search for images similar to a query image in your favorite dataset. To proceed further, first install milvus by following the instructions below. Then proceed to the `m1_reverse_image_search` folder for further instructions.
 
 To allow metadata creation of an image, we have provided the `Metadata_Creation.ipynb` notebook. Open that notebook in Google Colab with GPU on. Then, use `create_metadata_from_imgpath` to create metadata from the path to an image.
